@@ -40,12 +40,12 @@ type ConsumeRequest struct {
 }
 
 type ConsumeResponse struct {
-	Record record `json:"record"`
+	Record Record `json:"record"`
 }
 
 func (s *httpServer) handleProduce(w http.ResponseWriter, r *http.Request){
 	var req ProduceRequest
-	err := json.NewDecoder(r.Body).Decode(r&req)
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -77,13 +77,13 @@ func (s* httpServer) handleConsume(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusIntervalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	res := ConsumeResponse{Record: record}
 	err = json.NewEncoder(w).Encode(res)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusIntervalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
